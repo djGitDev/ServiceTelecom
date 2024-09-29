@@ -1,16 +1,13 @@
 package ca.uqam.info.mgl7460.tp1.implementations;
 
-import ca.uqam.info.mgl7460.tp1.types.Produit;
-import ca.uqam.info.mgl7460.tp1.types.Client;
+import ca.uqam.info.mgl7460.tp1.types.Abonnement;
 import ca.uqam.info.mgl7460.tp1.types.Adresse;
+import ca.uqam.info.mgl7460.tp1.types.Client;
+import ca.uqam.info.mgl7460.tp1.types.ExceptionProduitIncompatible;
 import ca.uqam.info.mgl7460.tp1.types.NumeroTelephone;
 import ca.uqam.info.mgl7460.tp1.types.PanierClient;
-import ca.uqam.info.mgl7460.tp1.types.Abonnement;
-import ca.uqam.info.mgl7460.tp1.types.ExceptionProduitIncompatible;
-
-import java.util.ArrayList;
+import ca.uqam.info.mgl7460.tp1.types.Produit;
 import java.util.Iterator;
-import java.util.List;
 import java.util.UUID;
 
 
@@ -22,7 +19,6 @@ public class ClientImpl implements Client {
     private Adresse adresse;
     private NumeroTelephone numeroTelephone;
     private PanierClient panierClient;
-    private List<Abonnement> abonnements;
 
 
     public ClientImpl(String nom, String prenom, Adresse adresse, NumeroTelephone numeroTelephone) {
@@ -31,7 +27,6 @@ public class ClientImpl implements Client {
         this.prenom = prenom;
         this.adresse = adresse;
         this.numeroTelephone = numeroTelephone;
-        this.abonnements = new ArrayList<>();
     }
 
 
@@ -146,18 +141,8 @@ public class ClientImpl implements Client {
  */
 @Override
 public Abonnement abonneClient(Produit produit) throws ExceptionProduitIncompatible {
-
-    for (Abonnement abonnement : abonnements) {
-        for (Iterator<Produit> it = abonnement.getProduit().getProduitsExclus(); it.hasNext(); ) {
-            Produit produitExclus = it.next();
-            if (produitExclus.equals(produit)) {
-                throw new ExceptionProduitIncompatible(produit, abonnement.getProduit());
-            }
-        }
-    }
-
-    // FIXME: implement Abonnement
-    return null;
+    return getPanier().ajouteProduit(produit);
+    
 }
 
     /**
@@ -167,6 +152,6 @@ public Abonnement abonneClient(Produit produit) throws ExceptionProduitIncompati
      */
     @Override
     public Iterator<Abonnement> getAbonnements() {
-        return abonnements.iterator();
+        return getPanier().getAbonnements();
     }
 }
