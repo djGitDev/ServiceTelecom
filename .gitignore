@@ -1,0 +1,50 @@
+# Compiled class files
+*.class
+
+# Log files
+*.log
+
+# Build directories
+/build/
+bin/
+target/
+
+# IDE specific files
+/.idea/
+/*.iml
+/.vscode/
+*.classpath
+*.project
+
+# Maven specific files
+/.mvn/
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+
+# Gradle specific files
+/.gradle/
+build/
+.gradle/
+
+# Dependency directories
+/lib/
+libs/
+
+# JAR files
+*.jar
+*.war
+*.ear
+
+# Other files to ignore
+*.DS_Store
+*.class
+*.user
+*.swp
+*.tmp
+*.bak
+
+# Application-specific files
+*.hprof
+*.so
+*.dll
