@@ -8,10 +8,11 @@ import ca.uqam.info.mgl7460.tp1.types.NumeroTelephone;
 import ca.uqam.info.mgl7460.tp1.types.PanierClient;
 import ca.uqam.info.mgl7460.tp1.types.Produit;
 import java.util.Iterator;
-import java.util.UUID;
 
 
 public class ClientImpl implements Client {
+
+    private static int compteur = 0;
 
     private final String idClient;
     private final String nom;
@@ -21,12 +22,12 @@ public class ClientImpl implements Client {
     private PanierClient panierClient;
 
 
-    public ClientImpl(String nom, String prenom, Adresse adresse, NumeroTelephone numeroTelephone) {
-        this.idClient = UUID.randomUUID().toString();
+    public ClientImpl(String nom, String prenom) {
+        
         this.nom = nom;
         this.prenom = prenom;
-        this.adresse = adresse;
-        this.numeroTelephone = numeroTelephone;
+        ClientImpl.compteur++;
+        this.idClient = "CL-" + ClientImpl.compteur;
     }
 
 
