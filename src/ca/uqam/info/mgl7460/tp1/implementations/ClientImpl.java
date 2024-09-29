@@ -4,6 +4,7 @@ import ca.uqam.info.mgl7460.tp1.types.Abonnement;
 import ca.uqam.info.mgl7460.tp1.types.Adresse;
 import ca.uqam.info.mgl7460.tp1.types.Client;
 import ca.uqam.info.mgl7460.tp1.types.ExceptionProduitIncompatible;
+import ca.uqam.info.mgl7460.tp1.types.FabriqueObjets;
 import ca.uqam.info.mgl7460.tp1.types.NumeroTelephone;
 import ca.uqam.info.mgl7460.tp1.types.PanierClient;
 import ca.uqam.info.mgl7460.tp1.types.Produit;
@@ -111,8 +112,11 @@ public class ClientImpl implements Client {
      */
     @Override
     public PanierClient creerPanier() {
-        // FIXME: implement PanierClient
-        return null;
+         if(panierClient == null){
+            FabriqueObjets fabrique = FabriqueObjets.getSingleton();
+            panierClient = fabrique.creerPanierClient(this);
+        }
+        return panierClient;
     }
 
     /**
@@ -123,7 +127,10 @@ public class ClientImpl implements Client {
      */
     @Override
     public PanierClient getPanier() {
-        return panierClient;
+        if(panierClient == null){
+            creerPanier();
+        }
+        return panierClient;    
     }
 
     /**
