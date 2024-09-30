@@ -1,5 +1,7 @@
 package ca.uqam.info.mgl7460.tp1.types;
 
+import ca.uqam.info.mgl7460.tp1.implementations.FabriqueObjetsImpl;
+
 import java.util.Iterator;
 
 //import ca.uqam.info.mgl7460.tp1.implementations.FabriqueObjetsImpl;
@@ -99,11 +101,6 @@ public interface FabriqueObjets {
     public Produit getProduitAvecNumero(String numero);
 
     public static FabriqueObjets getSingleton() {
-        // TODO
-        // 1) décommenter la ligne suivante
-        // return FabriqueObjetsImpl.getSingleton();
-
-        // 2) effacer la ligne suivante
-        return null;
+        return FabriqueObjetsImpl.getSingleton();
     }
 }
