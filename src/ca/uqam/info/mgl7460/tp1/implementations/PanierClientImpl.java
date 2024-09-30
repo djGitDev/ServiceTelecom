@@ -1,4 +1,5 @@
 package ca.uqam.info.mgl7460.tp1.implementations;
+
 import ca.uqam.info.mgl7460.tp1.types.Produit;
 import ca.uqam.info.mgl7460.tp1.types.TypeTermes;
 import ca.uqam.info.mgl7460.tp1.types.PanierClient;
@@ -14,23 +15,19 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.UUID;
 
-public class PanierClientImpl implements PanierClient  {
+public class PanierClientImpl implements PanierClient {
 
     private float coutTotal;
     private float parametreTermes;
     private TypeTermes termes;
 
     private Client client;
-    private List <Abonnement> abonnements;
+    private List<Abonnement> abonnements;
 
     //constructeur
-    public PanierClientImpl (float coutTotal, float parametreTermes, TypeTermes termes, Client client){
-        this.coutTotal = coutTotal;
-        this.parametreTermes = parametreTermes;
-        this.termes = termes;
+    public PanierClientImpl(Client client) {
         this.client = client;
         this.abonnements = new ArrayList<>();
-
     }
 
     @Override
@@ -50,7 +47,7 @@ public class PanierClientImpl implements PanierClient  {
 
     @Override
     public float getParametreTermes() {
-      return parametreTermes;
+        return parametreTermes;
     }
 
     @Override
@@ -70,7 +67,7 @@ public class PanierClientImpl implements PanierClient  {
         if (termes == TypeTermes.REDUCTION_POURCENTAGE) {
             coutTotal = coutTotal * (1 - parametreTermes); // Applique le pourcentage de réduction
         }
-        
+
         return coutTotal;
     }
 
@@ -89,22 +86,99 @@ public class PanierClientImpl implements PanierClient  {
         return produits.iterator();
     }
 
+
+    /**
+     * Ajoute un produit au panier du client.
+     *
+     * @param prod Le produit à ajouter.
+     * @return Le nouvel abonnement créé ou l'abonnement existant si le produit est déjà présent.
+     * @throws ExceptionProduitIncompatible Si le produit est incompatible avec un produit déjà abonné.
+     */
     @Override
     public Abonnement ajouteProduit(Produit prod) throws ExceptionProduitIncompatible {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'ajouteProduit'");
+
+        // Vérifie si le produit est déjà abonné
+        for (Abonnement abonnement : abonnements) {
+            if (abonnement.getProduit().getNom().equals(prod.getNom())) {
+                return abonnement;
+            }
+        }
+
+        // Vérifie les produits exclus
+        for (Abonnement abonnement : abonnements) {
+            for (Iterator<Produit> it = abonnement.getProduit().getProduitsExclus(); it.hasNext(); ) {
+                Produit produitExclus = it.next();
+                if (produitExclus.getNom().equals(prod.getNom())) {
+                    throw new ExceptionProduitIncompatible(prod, produitExclus);
+                }
+            }
+        }
+
+        // Crée un nouvel abonnement et l'ajoute à la liste des abonnements
+        Abonnement nouvelAbonnement = new AbonnementImpl(client, prod);
+        abonnements.add(nouvelAbonnement);
+
+        // Vérifie les produits exigés et les ajoute si nécessaire
+        for (Abonnement abonnement : abonnements) {
+            for (Iterator<Produit> it = abonnement.getProduit().getProduitsExiges(); it.hasNext(); ) {
+                Produit produitExiges = it.next();
+                if (produitExiges.getNom().equals(prod.getNom())) {
+                    try {
+                        ajouteProduit(produitExiges);
+                    } catch (ExceptionProduitIncompatible e) {
+                        throw new ExceptionProduitIncompatible(prod, produitExiges);
+                    }
+                }
+            }
+        }
+
+        return nouvelAbonnement;
     }
 
+    /**
+     * Retire un abonnement pour un produit donné.
+     *
+     * @param prod Le produit pour lequel l'abonnement doit être retiré.
+     * @return L'abonnement retiré ou null si aucun abonnement n'a été trouvé.
+     * @throws ExceptionProduitRequis Si le produit est requis par un autre abonnement.
+     */
     @Override
     public Abonnement retirerAbonnement(Produit prod) throws ExceptionProduitRequis {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'retirerAbonnement'");
+
+        Abonnement abonnementARetirer = null;
+        for (Abonnement abonnement : abonnements) {
+            if (abonnement.getProduit().getNom().equals(prod.getNom())) {
+                for (Abonnement abonnement2 : abonnements) {
+                    for (Iterator<Produit> it = abonnement2.getProduit().getProduitsExiges(); it.hasNext(); ) {
+                        Produit produitExiges = it.next();
+                        if (produitExiges.getNom().equals(prod.getNom())) {
+                            throw new ExceptionProduitRequis(prod, produitExiges);
+                        }
+                    }
+                }
+                abonnementARetirer = abonnement;
+                abonnements.remove(abonnementARetirer);
+            }
+        }
+
+        return abonnementARetirer;
     }
 
+    /**
+     * Récupère l'abonnement pour un produit donné.
+     *
+     * @param prod Le produit pour lequel l'abonnement doit être récupéré.
+     * @return L'abonnement correspondant au produit ou null si aucun abonnement n'a été trouvé.
+     */
     @Override
     public Abonnement getAbonnementPourProduit(Produit prod) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getAbonnementPourProduit'");
+        Abonnement abonnementPourProduit = null;
+        for (Abonnement abonnement : abonnements) {
+            if (abonnement.getProduit().getNom().equals(prod.getNom())) {
+                abonnementPourProduit = abonnement;
+            }
+        }
+        return abonnementPourProduit;
     }
-    
+
 }
