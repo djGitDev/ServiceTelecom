@@ -1,4 +1,4 @@
-package ca.uqam.info.mgl7460.tp1.types;
+package types;
 
 public class ExceptionProduitIncompatible extends Exception {
     private final Produit existant;

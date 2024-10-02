@@ -1,7 +1,7 @@
-package ca.uqam.info.mgl7460.tp1.implementations;
 
-import ca.uqam.info.mgl7460.tp1.types.Produit;
-import ca.uqam.info.mgl7460.tp1.types.ForfaitProduits;
+package implementations;
+
+import types.*;
 
 import java.util.ArrayList;
 import java.util.Iterator;

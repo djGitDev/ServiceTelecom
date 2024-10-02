@@ -1,9 +1,7 @@
-package ca.uqam.info.mgl7460.tp1.implementations;
+package implementations;
 
-import ca.uqam.info.mgl7460.tp1.types.Abonnement;
-import ca.uqam.info.mgl7460.tp1.types.Client;
-import ca.uqam.info.mgl7460.tp1.types.Produit;
-import ca.uqam.info.mgl7460.tp1.types.TypeTermes;
+import types.*;
+
 import java.util.Date;
 
 public class AbonnementImpl implements Abonnement {

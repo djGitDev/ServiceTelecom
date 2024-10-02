@@ -1,4 +1,6 @@
-package ca.uqam.info.mgl7460.tp1.types;
+package types;
+
+
 import java.util.Iterator;
 
 public interface Produit {

@@ -1,10 +1,8 @@
-package ca.uqam.info.mgl7460.tp1.types;
+package types;
 
-import ca.uqam.info.mgl7460.tp1.implementations.FabriqueObjetsImpl;
-
+import implementations.FabriqueObjetsImpl;
 import java.util.Iterator;
 
-//import ca.uqam.info.mgl7460.tp1.implementations.FabriqueObjetsImpl;
 
 /**
  * cette interface représente la <>fabrique abstraite</i> pour cette
