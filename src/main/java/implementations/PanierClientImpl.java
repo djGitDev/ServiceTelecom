@@ -1,8 +1,7 @@
-
 package implementations;
 
+import implementations.AbonnementImpl;
 import types.*;
-
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -52,15 +51,18 @@ public class PanierClientImpl implements PanierClient {
     // Calculer le cout total
     @Override
     public float getCoutTotal() {
+
         float coutTotal = 0.0f;
         for (Abonnement abonnement : abonnements) {
+            if(abonnement.getProduit() instanceof ForfaitProduits forfait){
+                for (Iterator<Produit> it = forfait.getProduitsInclus(); it.hasNext(); ) {
+                    Produit produit = it.next();
+                    coutTotal -= produit.getCoutAnnuel();
+                }
+            }
             coutTotal += abonnement.getCoutAnnuel();
         }
 
-        // Applique le rabais si applicable
-        if (termes == TypeTermes.REDUCTION_POURCENTAGE) {
-            coutTotal = coutTotal * (1 - parametreTermes); // Applique le pourcentage de réduction
-        }
 
         return coutTotal;
     }
@@ -91,12 +93,13 @@ public class PanierClientImpl implements PanierClient {
     @Override
     public Abonnement ajouteProduit(Produit prod) throws ExceptionProduitIncompatible {
 
-        // Vérifie si le produit est déjà abonné
+
         for (Abonnement abonnement : abonnements) {
             if (abonnement.getProduit().getNom().equals(prod.getNom())) {
                 return abonnement;
             }
         }
+
 
         // Vérifie les produits exclus
         for (Abonnement abonnement : abonnements) {
@@ -108,23 +111,29 @@ public class PanierClientImpl implements PanierClient {
             }
         }
 
+
         // Crée un nouvel abonnement et l'ajoute à la liste des abonnements
         Abonnement nouvelAbonnement = new AbonnementImpl(client, prod);
         abonnements.add(nouvelAbonnement);
 
-        // Vérifie les produits exigés et les ajoute si nécessaire
-        for (Abonnement abonnement : abonnements) {
-            for (Iterator<Produit> it = abonnement.getProduit().getProduitsExiges(); it.hasNext(); ) {
-                Produit produitExiges = it.next();
-                if (produitExiges.getNom().equals(prod.getNom())) {
-                    try {
-                        ajouteProduit(produitExiges);
-                    } catch (ExceptionProduitIncompatible e) {
-                        throw new ExceptionProduitIncompatible(prod, produitExiges);
-                    }
-                }
+
+
+
+        if (prod instanceof ForfaitProduits forfait) {
+            for (Iterator<Produit> it = forfait.getProduitsInclus(); it.hasNext(); ) {
+                Produit produit = it.next();
+                ajouteProduit(produit);
             }
         }
+
+
+        // Vérifie les produits exigés et les ajoute si nécessaire
+        for (Iterator<Produit> it = prod.getProduitsExiges(); it.hasNext(); ) {
+            Produit produitExiges = it.next();
+            ajouteProduit(produitExiges);
+        }
+
+
 
         return nouvelAbonnement;
     }
@@ -139,23 +148,24 @@ public class PanierClientImpl implements PanierClient {
     @Override
     public Abonnement retirerAbonnement(Produit prod) throws ExceptionProduitRequis {
 
-        Abonnement abonnementARetirer = null;
         for (Abonnement abonnement : abonnements) {
-            if (abonnement.getProduit().getNom().equals(prod.getNom())) {
-                for (Abonnement abonnement2 : abonnements) {
-                    for (Iterator<Produit> it = abonnement2.getProduit().getProduitsExiges(); it.hasNext(); ) {
-                        Produit produitExiges = it.next();
-                        if (produitExiges.getNom().equals(prod.getNom())) {
-                            throw new ExceptionProduitRequis(prod, produitExiges);
-                        }
-                    }
+            for (Iterator<Produit> it = abonnement.getProduit().getProduitsExiges(); it.hasNext(); ) {
+                Produit produitExiges = it.next();
+                if (produitExiges.getNom().equals(prod.getNom())) {
+                    throw new ExceptionProduitRequis(prod, produitExiges);
                 }
-                abonnementARetirer = abonnement;
-                abonnements.remove(abonnementARetirer);
             }
         }
 
-        return abonnementARetirer;
+        for (Abonnement abonnement : abonnements) {
+            if (abonnement.getProduit().getNom().equals(prod.getNom())) {
+                abonnements.remove(abonnement);
+                return abonnement;
+            }
+        }
+
+        return null;
+
     }
 
     /**

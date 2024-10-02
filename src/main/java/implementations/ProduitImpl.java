@@ -1,6 +1,7 @@
 package implementations;
 
 import types.*;
+
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -77,7 +78,7 @@ public class ProduitImpl implements Produit {
 
     @Override
     public Produit retireProduitExclus(Produit prod) {
-        return retireProduit(prod,produitsExclus);
+        return retireProduit(prod, produitsExclus);
     }
 
     @Override
@@ -92,7 +93,7 @@ public class ProduitImpl implements Produit {
 
     @Override
     public boolean exclue(Produit p) {
-        return estPresent(p,produitsExclus);
+        return estAbsent(p, produitsExclus);
     }
 
     @Override
@@ -134,12 +135,46 @@ public class ProduitImpl implements Produit {
         return ret;
     }
 
-    protected boolean estPresent(Produit p, List<Produit> produits){
+    protected boolean estPresent(Produit p, List<Produit> produits) {
         for (Produit courant : produits) {
-            if (courant.equals(p))
+            for (Iterator<Produit> it = courant.getProduitsExiges(); it.hasNext(); ) {
+                Produit produitExige = it.next();
+                if (produitExige.equals(p)) {
+                    return true;
+                }
+            }
+            if (courant.equals(p)) {
                 return true;
-            break;
+            }
+        }
+
+        return false;
+    }
+
+    protected boolean estAbsent(Produit p, List<Produit> produits) {
+        for (Produit courant : produits) {
+            for (Iterator<Produit> it = courant.getProduitsExclus(); it.hasNext(); ) {
+                Produit produitExclus = it.next();
+                if (produitExclus.equals(p)) {
+                    return true;
+                }
+            }
+            if (courant.equals(p)) {
+                return true;
+            }
+        }
+
+
+        for (Iterator<Produit> it = p.getProduitsExclus(); it.hasNext(); ) {
+            Produit produit = it.next();
+            for (Iterator<Produit> it2 = produit.getProduitsExclus(); it2.hasNext(); ) {
+                Produit produit2 = it2.next();
+                if (p.equals(produit2)) {
+                    return true;
+                }
+            }
         }
         return false;
     }
+
 }
