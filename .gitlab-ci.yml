@@ -1,0 +1,15 @@
+image: maven:3.8.4-openjdk-17
+
+stages:
+  - build
+  - test
+
+build:
+  stage: build
+  script:
+    - mvn clean install
+
+test:
+  stage: test
+  script:
+    - mvn test
