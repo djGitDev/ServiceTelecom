@@ -1,8 +1,10 @@
 package implementations;
 
+
 import types.*;
 
 import java.util.Date;
+import java.util.Iterator;
 
 public class AbonnementImpl implements Abonnement {
 
@@ -61,7 +63,11 @@ public class AbonnementImpl implements Abonnement {
 
     @Override
     public float getCoutAnnuel() {
-        return coutAnnuel;
+        if (termes == TypeTermes.REDUCTION_POURCENTAGE) {
+            coutAnnuel = getProduit().getCoutAnnuel();
+            return getProduit().getCoutAnnuel() * (1 - parametreTermes);
+        }
+        return getProduit().getCoutAnnuel();
     }
 
     @Override

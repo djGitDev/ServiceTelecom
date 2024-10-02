@@ -1,5 +1,4 @@
 package implementations;
-
 import types.*;
 
 import java.util.Iterator;
@@ -121,9 +120,6 @@ public class ClientImpl implements Client {
      */
     @Override
     public PanierClient getPanier() {
-        if(panierClient == null){
-            creerPanier();
-        }
         return panierClient;    
     }
 
@@ -143,8 +139,11 @@ public class ClientImpl implements Client {
  */
 @Override
 public Abonnement abonneClient(Produit produit) throws ExceptionProduitIncompatible {
+     if(panierClient == null){
+            creerPanier();
+        }
+
     return getPanier().ajouteProduit(produit);
-    
 }
 
     /**
