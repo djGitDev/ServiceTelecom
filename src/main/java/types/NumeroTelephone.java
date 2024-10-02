@@ -1,4 +1,4 @@
-package ca.uqam.info.mgl7460.tp1.types;
+package types;
 
 public record NumeroTelephone(int codePays, int codeRegional, int numero, int ... poste) {
     public boolean equals(Object obj){

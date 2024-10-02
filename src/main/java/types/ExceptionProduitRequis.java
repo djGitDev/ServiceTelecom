@@ -1,4 +1,4 @@
-package ca.uqam.info.mgl7460.tp1.types;
+package types;
 
 public class ExceptionProduitRequis extends Exception {
     private final Produit produitAEnlever;
