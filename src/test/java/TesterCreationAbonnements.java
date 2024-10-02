@@ -1,24 +1,14 @@
-package ca.uqam.info.mgl7460.tp1.tests;
 
 import org.junit.jupiter.api.Test;
 
-import ca.uqam.info.mgl7460.tp1.types.Abonnement;
-import ca.uqam.info.mgl7460.tp1.types.Adresse;
-import ca.uqam.info.mgl7460.tp1.types.Client;
-import ca.uqam.info.mgl7460.tp1.types.ExceptionProduitIncompatible;
-import ca.uqam.info.mgl7460.tp1.types.ExceptionProduitRequis;
-import ca.uqam.info.mgl7460.tp1.types.FabriqueObjets;
-import ca.uqam.info.mgl7460.tp1.types.ForfaitProduits;
-import ca.uqam.info.mgl7460.tp1.types.NumeroTelephone;
-import ca.uqam.info.mgl7460.tp1.types.PanierClient;
-import ca.uqam.info.mgl7460.tp1.types.Produit;
-import ca.uqam.info.mgl7460.tp1.types.TypeTermes;
+
 
 import java.util.Iterator;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
+import types.*;
 
 
 public class TesterCreationAbonnements {

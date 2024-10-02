@@ -1,16 +1,10 @@
-package ca.uqam.info.mgl7460.tp1.tests;
 
 import org.junit.jupiter.api.Test;
 
-import ca.uqam.info.mgl7460.tp1.types.Adresse;
-import ca.uqam.info.mgl7460.tp1.types.Client;
-import ca.uqam.info.mgl7460.tp1.types.FabriqueObjets;
-import ca.uqam.info.mgl7460.tp1.types.ForfaitProduits;
-import ca.uqam.info.mgl7460.tp1.types.NumeroTelephone;
-import ca.uqam.info.mgl7460.tp1.types.Produit;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
+import types.*;
 
 
 public class TesterRelationsProduits {
