@@ -1,38 +1,51 @@
+
+# Compiled class files
+*.class
+
+# Log files
+*.log
+
+# Build directories
+/build/
+bin/
 target/
-!.mvn/wrapper/maven-wrapper.jar
-!**/src/main/**/target/
-!**/src/test/**/target/
 
-### IntelliJ IDEA ###
-.idea/modules.xml
-.idea/jarRepositories.xml
-.idea/compiler.xml
-.idea/libraries/
-*.iws
-*.iml
-*.ipr
+# IDE specific files
+/.idea/
+/*.iml
+/.vscode/
+*.classpath
+*.project
 
-### Eclipse ###
-.apt_generated
-.classpath
-.factorypath
-.project
-.settings
-.springBeans
-.sts4-cache
+# Maven specific files
+/.mvn/
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionsBackup
 
-### NetBeans ###
-/nbproject/private/
-/nbbuild/
-/dist/
-/nbdist/
-/.nb-gradle/
+# Gradle specific files
+/.gradle/
 build/
-!**/src/main/**/build/
-!**/src/test/**/build/
+.gradle/
 
-### VS Code ###
-.vscode/
+# Dependency directories
+/lib/
+libs/
 
-### Mac OS ###
-.DS_Store
+# JAR files
+*.jar
+*.war
+*.ear
+
+# Other files to ignore
+*.DS_Store
+*.class
+*.user
+*.swp
+*.tmp
+*.bak
+
+# Application-specific files
+*.hprof
+*.so
+*.dll
