@@ -1,12 +1,10 @@
 package implementations;
 
-import implementations.AbonnementImpl;
 import types.*;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.UUID;
 
 public class PanierClientImpl implements PanierClient {
 
@@ -95,7 +93,7 @@ public class PanierClientImpl implements PanierClient {
 
 
         for (Abonnement abonnement : abonnements) {
-            if (abonnement.getProduit().getNom().equals(prod.getNom())) {
+            if (abonnement.getProduit().equals(prod)) {
                 return abonnement;
             }
         }
@@ -103,9 +101,10 @@ public class PanierClientImpl implements PanierClient {
 
         // Vérifie les produits exclus
         for (Abonnement abonnement : abonnements) {
-            for (Iterator<Produit> it = abonnement.getProduit().getProduitsExclus(); it.hasNext(); ) {
+            Produit produitAbonne = abonnement.getProduit();
+            for (Iterator<Produit> it = produitAbonne.getProduitsExclus(); it.hasNext(); ) {
                 Produit produitExclus = it.next();
-                if (produitExclus.getNom().equals(prod.getNom())) {
+                if (produitExclus.equals(prod)) {
                     throw new ExceptionProduitIncompatible(prod, produitExclus);
                 }
             }
@@ -151,14 +150,14 @@ public class PanierClientImpl implements PanierClient {
         for (Abonnement abonnement : abonnements) {
             for (Iterator<Produit> it = abonnement.getProduit().getProduitsExiges(); it.hasNext(); ) {
                 Produit produitExiges = it.next();
-                if (produitExiges.getNom().equals(prod.getNom())) {
+                if (produitExiges.equals(prod)) {
                     throw new ExceptionProduitRequis(prod, produitExiges);
                 }
             }
         }
 
         for (Abonnement abonnement : abonnements) {
-            if (abonnement.getProduit().getNom().equals(prod.getNom())) {
+            if (abonnement.getProduit().equals(prod)) {
                 abonnements.remove(abonnement);
                 return abonnement;
             }
@@ -178,7 +177,7 @@ public class PanierClientImpl implements PanierClient {
     public Abonnement getAbonnementPourProduit(Produit prod) {
         Abonnement abonnementPourProduit = null;
         for (Abonnement abonnement : abonnements) {
-            if (abonnement.getProduit().getNom().equals(prod.getNom())) {
+            if (abonnement.getProduit().equals(prod)) {
                 abonnementPourProduit = abonnement;
             }
         }
