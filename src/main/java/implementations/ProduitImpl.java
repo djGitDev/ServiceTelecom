@@ -58,7 +58,8 @@ public class ProduitImpl implements Produit {
 
     @Override
     public void ajouteProduitExige(Produit prod) {
-        produitsExiges.add(prod);
+        if (!produitEstDejaPresent(prod,produitsExiges))
+            produitsExiges.add(prod);
     }
 
     @Override
@@ -73,7 +74,36 @@ public class ProduitImpl implements Produit {
 
     @Override
     public void ajouteProduitExclus(Produit prod) {
-        produitsExclus.add(prod);
+        // Vérifie si le produit est déjà exclu en parcourant l'itérateur
+        if (!produitEstDejaPresent(prod,produitsExclus)) {
+            produitsExclus.add(prod);
+
+            // Vérifie réciproquement que this n'est pas déjà dans les exclus du produit a ajouté
+            if (!produitEstDejaExclusDans(prod, this)) {
+                prod.ajouteProduitExclus(this);
+            }
+        }
+    }
+
+    // Méthode pour vérifier si un produit est déjà present dans la liste des produits
+    private boolean produitEstDejaPresent(Produit prod, List<Produit> produits) {
+        for (Produit produit : produits) {
+            if (produit.equals(prod)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    // Méthode pour vérifier si l'objet produitAverifier est dans les exclus de prod
+    private boolean produitEstDejaExclusDans(Produit prod, Produit produitAverifier) {
+        Iterator<Produit> it = prod.getProduitsExclus();
+        while (it.hasNext()) {
+            if (it.next().equals(produitAverifier)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     @Override
@@ -93,7 +123,7 @@ public class ProduitImpl implements Produit {
 
     @Override
     public boolean exclue(Produit p) {
-        return estAbsent(p, produitsExclus);
+        return estAbsent(p, produitsExclus, produitsExiges);
     }
 
     @Override
@@ -151,30 +181,38 @@ public class ProduitImpl implements Produit {
         return false;
     }
 
-    protected boolean estAbsent(Produit p, List<Produit> produits) {
-        for (Produit courant : produits) {
+    protected boolean estAbsent(Produit produitAverifier, List<Produit> produitsExclus, List<Produit> produitsExiges) {
+        for (Produit courant : produitsExclus) {
             for (Iterator<Produit> it = courant.getProduitsExclus(); it.hasNext(); ) {
                 Produit produitExclus = it.next();
-                if (produitExclus.equals(p)) {
+                if (produitExclus.equals(produitAverifier)) {
                     return true;
                 }
             }
-            if (courant.equals(p)) {
+            if (courant.equals(produitAverifier)) {
                 return true;
             }
         }
 
 
-        for (Iterator<Produit> it = p.getProduitsExclus(); it.hasNext(); ) {
-            Produit produit = it.next();
-            for (Iterator<Produit> it2 = produit.getProduitsExclus(); it2.hasNext(); ) {
-                Produit produit2 = it2.next();
-                if (p.equals(produit2)) {
+        for (Iterator<Produit> it = produitAverifier.getProduitsExclus(); it.hasNext(); ) {
+            Produit produitExclusDuProduitAverifier = it.next();
+            for (Iterator<Produit> it2 = produitsExiges.iterator(); it2.hasNext(); ) {
+                Produit produitExige = it2.next();
+                if (produitExclusDuProduitAverifier.equals(produitExige)) {
                     return true;
+                }
+                for(Iterator<Produit> it3 =produitExige.getProduitsExiges(); it3.hasNext(); ) {
+                    Produit produitExigeDuProduitExige = it3.next();
+                    if (produitExclusDuProduitAverifier.equals(produitExigeDuProduitExige)) {
+                        return true;
+                    }
                 }
             }
         }
         return false;
     }
+
+
 
 }

@@ -63,11 +63,14 @@ public class AbonnementImpl implements Abonnement {
 
     @Override
     public float getCoutAnnuel() {
+        Produit produitAbonne = getProduit();
+        float coutAnnuelSansReduction = produitAbonne.getCoutAnnuel();
         if (termes == TypeTermes.REDUCTION_POURCENTAGE) {
-            coutAnnuel = getProduit().getCoutAnnuel();
-            return getProduit().getCoutAnnuel() * (1 - parametreTermes);
+            return coutAnnuelSansReduction * (1 - parametreTermes);
+        }else if (termes == TypeTermes.REDUCTION_VALEUR) {
+            return coutAnnuelSansReduction - parametreTermes;
         }
-        return getProduit().getCoutAnnuel();
+        return coutAnnuelSansReduction;
     }
 
     @Override
