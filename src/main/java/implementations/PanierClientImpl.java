@@ -112,7 +112,8 @@ public class PanierClientImpl implements PanierClient {
 
 
         // Crée un nouvel abonnement et l'ajoute à la liste des abonnements
-        Abonnement nouvelAbonnement = new AbonnementImpl(client, prod);
+        FabriqueObjets fabrique = FabriqueObjets.getSingleton();
+        Abonnement nouvelAbonnement = fabrique.creerAbonnement(client, prod);
         abonnements.add(nouvelAbonnement);
 
 
