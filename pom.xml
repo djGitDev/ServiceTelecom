@@ -13,6 +13,11 @@
         <maven.compiler.target>17</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
+    <properties>
+        <sonar.projectKey>abi_ayad.mohamed_djawad_servicestelecommunication_AZMIhpOb0dfYL57MBLsT</sonar.projectKey>
+        <sonar.projectName>ServicesTelecommunicationJava</sonar.projectName>
+        <sonar.qualitygate.wait>true</sonar.qualitygate.wait>
+    </properties>
     <dependencies>
         <dependency>
             <groupId>org.junit.jupiter</groupId>
