@@ -1,0 +1,40 @@
+name: Maven Build and Test
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    container:
+      image: maven:3.8.4-openjdk-17
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Build with Maven
+        run: mvn clean install
+
+  test:
+    needs: build
+    runs-on: ubuntu-latest
+    container:
+      image: maven:3.8.4-openjdk-17
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Run tests
+        run: mvn test
+
+      - name: Upload test reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: junit-reports
+          path: target/surefire-reports/*.xml
